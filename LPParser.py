@@ -11,7 +11,7 @@ class LPParser:
         self.fun_statement = ""
         self.data_type = data_t
         self.bounds = [''] * self.max_graph_size
-        self.variables = [''] * self.max_graph_size * 2
+        self.variables = [''] * self.max_graph_size * 4
         self.vars = ""
         self.matrix = matrix
         self.size_of_graph = len(matrix)
@@ -53,9 +53,15 @@ class LPParser:
                 if matrix[i][j] is not 0:
                     if matrix[i][j] is 1:
                         fun += self.convertIntToLetter(i) + "_" + self.convertIntToLetter(j) + " + "
+                        if self.type_of_graph is "un":
+                            fun += self.convertIntToLetter(j) + "_" + self.convertIntToLetter(i) + " + "
                     else:
                         fun += str((matrix[i][j]))
                         fun += self.convertIntToLetter(i) + "_" + self.convertIntToLetter(j) + " + "
+                        if self.type_of_graph is "un":
+                            fun += str((matrix[j][i]))
+                            fun += self.convertIntToLetter(j) + "_" + self.convertIntToLetter(i) + " + "
+
         fun = fun[:-2]
         return fun
 
