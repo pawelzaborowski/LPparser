@@ -1,5 +1,9 @@
+from itertools import islice
+
+
 class LPParser:
     def __init__(self, matrix, start_node, term_node, type, fun, data_t):
+
         self.start_point, self.termination_point = start_node, term_node
         self.max_graph_size = 18
         self.type_of_graph = type
@@ -7,14 +11,15 @@ class LPParser:
         self.fun_statement = ""
         self.data_type = data_t
         self.bounds = [''] * self.max_graph_size
-        self.variables = [''] * self.max_graph_size
-        # self.matrix = matrix
-        self.matrix = [[0, 1, 1, 0, 0], [0, 0, 0, 8, 1], [0, 0, 0, 1, 0], [0, 0, 0, 0, 1], [0, 0, 0, 0, 0]]
+        self.variables = [''] * self.max_graph_size * 2
+        self.vars = ""
+        self.matrix = matrix
         self.size_of_graph = len(matrix)
         self.others_matrix = []
+
         for i in range(0, self.size_of_graph):
             temp = []
-            for j in range(0, self.max_graph_size):
+            for j in range(0, self.max_graph_size * 2):
                 temp.append('')
             self.others_matrix.append(temp)
 
@@ -25,11 +30,15 @@ class LPParser:
         k = 0
         for i in range(0, len(matrix)):
             for j in range(0, len(matrix)):
-                j = j + i
-                if j < len(matrix):
-                    if i is not j:
-                        self.variables[k] = self.convertIntToLetter(i) + "_" + self.convertIntToLetter(j)
-                        k += 1
+                if matrix[i][j] is not 0:
+                    j = j + i
+                    if j < len(matrix):
+                        if i is not j:
+                            if self.type_of_graph is "un":
+                                self.variables[k] = self.convertIntToLetter(j) + "_" + self.convertIntToLetter(i)
+                                k += 1
+                            self.variables[k] = self.convertIntToLetter(i) + "_" + self.convertIntToLetter(j)
+                            k += 1
 
         lenm = len(self.variables)
         while lenm > 0:
@@ -52,20 +61,24 @@ class LPParser:
 
     def parseMatrixToCode(self, matrix):
 
+        if self.type_of_graph is "un":
+            for i in range(0, len(matrix)):
+                for j in range(0, len(matrix)):
+                    matrix[j][i] = matrix[i][j]
+
         column_i = 0
         column_j = 0
         for i in range(0, len(matrix)):
             for j in range(0, len(matrix)):
                 if matrix[i][j] is not 0:
-                    if column_i > 0 and self.others_matrix[i][column_i - 2] is '':
-                        column_i -= 2
-                    if column_j > 0 and self.others_matrix[j][column_j - 2] is '':
-                        column_j -= 2
-
                     self.others_matrix[i][column_i], self.others_matrix[i][column_i + 1] = "+", \
-                                                        self.convertIntToLetter(i) + "_" + self.convertIntToLetter(j)
+                                                                                           self.convertIntToLetter(
+                                                                                               i) + "_" + self.convertIntToLetter(
+                                                                                               j)
                     self.others_matrix[j][column_j], self.others_matrix[j][column_j + 1] = "-", \
-                                                        self.convertIntToLetter(i) + "_" + self.convertIntToLetter(j)
+                                                                                           self.convertIntToLetter(
+                                                                                               i) + "_" + self.convertIntToLetter(
+                                                                                               j)
                     column_i += 2
                     column_j += 2
 
@@ -103,6 +116,12 @@ class LPParser:
                 self.bounds[i] = ' '.join(self.others_matrix[i]) + " = 0;"
                 print(' '.join(self.others_matrix[i]) + " = 0")
 
+        lenb = len(self.bounds)
+        for i in range(0, len(self.bounds)):
+            lenb -= 1
+            if self.bounds[lenb] is '':
+                self.bounds = self.bounds[:-1]
+
     def prepareToWrite(self):
         self.fun_statement = self.printMatrixFunction(self.matrix)
         self.parseMatrixToCode(self.matrix)
@@ -121,7 +140,7 @@ class LPParser:
             for i in range(0, len(self.bounds)):
                 file.write(self.bounds[i] + '\n')
 
-            file.write(self.data_type + " ")
+            file.write('\n' + self.data_type + " ")
             file.write(', '.join(self.variables))
             file.write(";\n")
 
@@ -131,5 +150,6 @@ class LPParser:
         self.prepareToWrite()
 
 
-matrix = [[0, 1, 1, 0, 0], [0, 0, 0, 8, 1], [0, 0, 0, 1, 0], [0, 0, 0, 0, 1], [0, 0, 0, 0, 0]]
-LPParser(matrix, 1, 5, "un", "min", "bin").run()
+matrix = [[0, 5, 3, 0, 0, 0], [0, 0, 1, 4, 2, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 1], [0, 0, 0, 0, 0, 3],
+          [0, 0, 0, 0, 0, 0]]
+LPParser(matrix, 1, 6, "un", "min", "int").run()
