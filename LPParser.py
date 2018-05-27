@@ -18,8 +18,6 @@ class LPParser:
                 temp.append('')
             self.others_matrix.append(temp)
 
-        print(self  .others_matrix)
-
     def convertIntToLetter(self, value):
         return chr(value + 97)
 
@@ -65,13 +63,9 @@ class LPParser:
                         column_j -= 2
 
                     self.others_matrix[i][column_i], self.others_matrix[i][column_i + 1] = "+", \
-                                                                                           self.convertIntToLetter(
-                                                                                               i) + "_" + self.convertIntToLetter(
-                                                                                               j)
+                                                        self.convertIntToLetter(i) + "_" + self.convertIntToLetter(j)
                     self.others_matrix[j][column_j], self.others_matrix[j][column_j + 1] = "-", \
-                                                                                           self.convertIntToLetter(
-                                                                                               i) + "_" + self.convertIntToLetter(
-                                                                                               j)
+                                                        self.convertIntToLetter(i) + "_" + self.convertIntToLetter(j)
                     column_i += 2
                     column_j += 2
 
@@ -100,13 +94,13 @@ class LPParser:
 
         for i in range(0, len(self.others_matrix)):
             if i is 0:
-                self.bounds[i] = ' '.join(self.others_matrix[i]) + " = 1"
+                self.bounds[i] = ' '.join(self.others_matrix[i]) + " = 1;"
                 print(' '.join(self.others_matrix[i]) + " = 1")
             elif i is len(self.others_matrix) - 1:
-                self.bounds[i] = ' '.join(self.others_matrix[i]) + " = -1"
+                self.bounds[i] = ' '.join(self.others_matrix[i]) + " = -1;"
                 print(' '.join(self.others_matrix[i]) + " = -1")
             else:
-                self.bounds[i] = ' '.join(self.others_matrix[i]) + " = 0"
+                self.bounds[i] = ' '.join(self.others_matrix[i]) + " = 0;"
                 print(' '.join(self.others_matrix[i]) + " = 0")
 
     def prepareToWrite(self):
@@ -127,7 +121,7 @@ class LPParser:
             for i in range(0, len(self.bounds)):
                 file.write(self.bounds[i] + '\n')
 
-            file.write(self.data_type + ": ")
+            file.write(self.data_type + " ")
             file.write(', '.join(self.variables))
             file.write(";\n")
 
