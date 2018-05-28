@@ -50,17 +50,12 @@ class LPParser:
         fun = ""
         for i in range(0, len(matrix)):
             for j in range(0, len(matrix)):
-                if matrix[i][j] is not 0:
+                if matrix[i][j] is not 0 or float(0):
                     if matrix[i][j] is 1:
                         fun += self.convertIntToLetter(i) + "_" + self.convertIntToLetter(j) + " + "
-                        if self.type_of_graph is "un":
-                            fun += self.convertIntToLetter(j) + "_" + self.convertIntToLetter(i) + " + "
                     else:
                         fun += str((matrix[i][j]))
                         fun += self.convertIntToLetter(i) + "_" + self.convertIntToLetter(j) + " + "
-                        if self.type_of_graph is "un":
-                            fun += str((matrix[j][i]))
-                            fun += self.convertIntToLetter(j) + "_" + self.convertIntToLetter(i) + " + "
 
         fun = fun[:-2]
         return fun
@@ -156,6 +151,6 @@ class LPParser:
         self.prepareToWrite()
 
 
-matrix = [[0, 5, 3, 0, 0, 0], [0, 0, 1, 4, 2, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 1], [0, 0, 0, 0, 0, 3],
-          [0, 0, 0, 0, 0, 0]]
+matrix = [[0, 5, 3, 0, 0, 0], [1, 0, 1, 4, 2, 0], [0, 5, 0, 0, 0, 0], [0, 0, 0, 0, 1, 1], [0, 0, 0, 0, 0, 3],
+          [0.0, 0, 0, 0, 0, 0]]
 LPParser(matrix, 1, 6, "un", "min", "int").run()

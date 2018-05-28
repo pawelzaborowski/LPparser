@@ -1,5 +1,5 @@
 /* Objective function */
-min: 5a_b + 3a_c + b_c + 4b_d + 2b_e + d_e + d_f + 3e_f ;
+min: 5a_b + 3a_c + b_a + b_c + 4b_d + 2b_e + 5c_b + d_e + d_f + 3e_f + 0.0f_a ;
 
 /* Variable bounds */ 
 
